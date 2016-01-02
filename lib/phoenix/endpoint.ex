@@ -356,7 +356,9 @@ defmodule Phoenix.Endpoint do
   information.
 
   """
-
+  ### 引入Adapter
+  ### 而Adapter引入了Supervisor.Spec
+  ### 所以此处endpoint自身也是个Supervisor
   alias Phoenix.Endpoint.Adapter
 
   @doc false
