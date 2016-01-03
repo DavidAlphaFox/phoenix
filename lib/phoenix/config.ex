@@ -69,6 +69,7 @@ defmodule Phoenix.Config do
 
   Useful to read a particular value at compilation time.
   """
+  ### 从Application得到配置
   def from_env(otp_app, module, defaults) do
     config = Application.get_env(otp_app, module, [])
     merge(defaults, config)

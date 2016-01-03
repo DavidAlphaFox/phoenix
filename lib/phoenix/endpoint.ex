@@ -362,6 +362,7 @@ defmodule Phoenix.Endpoint do
   alias Phoenix.Endpoint.Adapter
 
   @doc false
+  ### 使用宏
   defmacro __using__(opts) do
     quote do
       unquote(config(opts))
