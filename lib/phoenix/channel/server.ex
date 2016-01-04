@@ -9,7 +9,7 @@ defmodule Phoenix.Channel.Server do
   alias Phoenix.Socket.Reply
 
   @moduledoc false
-
+	## Channel的Server是一个Genserver
   ## Transport API
 
   @doc """
