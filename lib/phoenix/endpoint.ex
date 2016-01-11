@@ -382,9 +382,10 @@ defmodule Phoenix.Endpoint do
       _ = var!(code_reloading?)
     end
   end
-
+	## 定义pubsub的名字
   defp pubsub() do
     quote do
+			## 从配置中拿到pubsub_server的名字
       @pubsub_server var!(config)[:pubsub][:name] ||
         (if var!(config)[:pubsub][:adapter] do
           raise ArgumentError, "an adapter was given to :pubsub but no :name was defined, " <>
@@ -609,6 +610,7 @@ defmodule Phoenix.Endpoint do
     module = tear_alias(module)
 
     quote do
+			## 此处定义了phoenix_sockets 的路径
       @phoenix_sockets {unquote(path), unquote(module)}
     end
   end
