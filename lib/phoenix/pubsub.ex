@@ -99,7 +99,7 @@ defmodule Phoenix.PubSub do
   returned. This is useful for offloading work to clients without blocking
   your PubSub adapter. See `Phoenix.PubSub.PG2` implementation for examples.
   """
-
+  ### 定义异常
   defmodule BroadcastError do
     defexception [:message]
     def exception(msg) do
@@ -128,6 +128,7 @@ defmodule Phoenix.PubSub do
           PubSub.subscribe(MyApp.PubSub, self(), "topic1",
             fastlane: {fast_pid, Phoenix.Transports.WebSocketSerializer, ["event1"]})
   """
+  ### 直接调用相应server的方法
   @spec subscribe(atom, pid, binary, Keyword.t) :: :ok | {:error, term}
   def subscribe(server, pid, topic, opts \\ []) when is_atom(server),
     do: call(server, :subscribe, [pid, topic, opts])

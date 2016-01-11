@@ -792,7 +792,7 @@ var Socket = exports.Socket = (function () {
     key: "channel",
     value: function channel(topic) {
       var chanParams = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
+      // 打开一个新的Channel
       var chan = new Channel(topic, chanParams, this);
       this.channels.push(chan);
       return chan;

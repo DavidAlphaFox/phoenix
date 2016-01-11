@@ -42,6 +42,7 @@ defmodule Phoenix.Endpoint.Adapter do
     pub_conf = conf[:pubsub]
 
     if adapter = pub_conf[:adapter] do
+      ### supervisor(module, args, options \\ [])
       [supervisor(adapter, [mod.__pubsub_server__(), pub_conf])]
     else
       []
@@ -87,6 +88,7 @@ defmodule Phoenix.Endpoint.Adapter do
   @doc """
   The endpoint configuration used at compile time.
   """
+  ### 获取配置文件
   def config(otp_app, endpoint) do
     Phoenix.Config.from_env(otp_app, endpoint, defaults(otp_app, endpoint))
   end
