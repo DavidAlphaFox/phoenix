@@ -268,7 +268,8 @@ defmodule Phoenix.Router do
       defoverridable [init: 1, call: 2]
     end
   end
-
+  # 这个和@before_compile相对应
+  # 在编译期间将用户定义好的路由表直接生成出来
   @doc false
   defmacro __before_compile__(env) do
     routes = env.module |> Module.get_attribute(:phoenix_routes) |> Enum.reverse
@@ -319,7 +320,8 @@ defmodule Phoenix.Router do
       unquote(match_404)
     end
   end
-
+  # 生成相应的match表
+  # 用来让dispatch工作 
   defp build_match({_route, exprs}) do
     quote do
       defp match_route(var!(conn), unquote(exprs.verb_match), unquote(exprs.path),

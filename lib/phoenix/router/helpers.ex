@@ -103,6 +103,7 @@ defmodule Phoenix.Router.Helpers do
     "/" <> Enum.join(script, "/") <> path
   end
 
+  # 让helpers模块生成相应的函数
   @doc """
   Generates the helper module for the given environment and routes.
   """

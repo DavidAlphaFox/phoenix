@@ -138,7 +138,7 @@ defmodule Phoenix.Router.Route do
       end)
     end |> pipe_through(route)
   end
-
+  
   defp pipe_through(initial, route) do
     plugs = route.pipe_through |> Enum.reverse |> Enum.map(&{&1, [], true})
     {conn, body} = Plug.Builder.compile(__ENV__, plugs, [])
