@@ -631,6 +631,7 @@ defmodule Phoenix.Controller do
 
     runtime_data = %{template: template, format: format}
     data = Phoenix.Endpoint.instrument conn, :phoenix_controller_render, runtime_data, fn ->
+      # 此时，controller会把conn放倒conn.assigns，这样我们就有机会拿到我们想要的东西
       Phoenix.View.render_to_iodata(view, template, Map.put(conn.assigns, :conn, conn))
     end
 
