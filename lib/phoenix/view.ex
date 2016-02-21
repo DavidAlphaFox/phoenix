@@ -190,6 +190,9 @@ defmodule Phoenix.View do
 
   """
   def render(module, template, assigns) do
+    ## 从assigns中取出layout
+    ## Map.pop会返回值和相应的新的Map
+    ## 结果就是{value,new_map}
     assigns
     |> to_map()
     |> Map.pop(:layout, false)

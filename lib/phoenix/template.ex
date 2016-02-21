@@ -126,7 +126,8 @@ defmodule Phoenix.Template do
       def render(module, template) when is_atom(module) do
         Phoenix.View.render(module, template, %{})
       end
-
+      # 当找不到模版的时候
+      # endpoint会处理
       @doc """
       Callback invoked when no template is found.
       By default it raises but can be customized

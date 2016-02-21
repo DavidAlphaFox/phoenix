@@ -626,7 +626,7 @@ defmodule Phoenix.Controller do
       conn
       |> put_private(:phoenix_template, template)
       |> prepare_assigns(assigns, format)
-
+    # 得到view控制模块
     view = Map.get(conn.private, :phoenix_view) ||
             raise "a view module was not specified, set one with put_view/2"
 
@@ -710,7 +710,8 @@ defmodule Phoenix.Controller do
         {mod, layout} -> {mod, template_name(layout, format)}
         false -> false
       end
-
+    # 在准备assigns的时候
+    # 将layout的模块和模版名称都放入其中
     update_in conn.assigns,
               & &1 |> Map.merge(assigns) |> Map.put(:layout, layout)
   end
