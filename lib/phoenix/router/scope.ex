@@ -6,7 +6,8 @@ defmodule Phoenix.Router.Scope do
   @pipes :phoenix_pipeline_scopes
 
   defstruct path: nil, alias: nil, as: nil, pipes: [], host: nil, private: %{}, assigns: %{}
-
+  # 为项目中的router模块放入两个属性
+  # 此处注意，不是在Phoenix的Framework的route中放入这两个属性
   @doc """
   Initializes the scope.
   """

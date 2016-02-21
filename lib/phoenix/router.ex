@@ -188,7 +188,10 @@ defmodule Phoenix.Router do
 
       # Set up initial scope
       @phoenix_pipeline nil
+      # __MODULE__是项目中的Router模块，而非框架的Router模块
       Phoenix.Router.Scope.init(__MODULE__)
+      # unquote(__MODULE__) 代表着这个地方直接在宏的编译期间就执行
+      # unquote(__MODULE__) 结果是Phoenix.Router这个模块
       @before_compile unquote(__MODULE__)
     end
   end
@@ -199,6 +202,8 @@ defmodule Phoenix.Router do
   # those functions only once and calling it over and
   # over again.
   defp defs() do
+    ## 宏被执行
+    ## 但是不准许宏内部有任何的unquote动作
     quote unquote: false do
       var!(add_resources, Phoenix.Router) = fn resource ->
         path = resource.path
@@ -236,6 +241,7 @@ defmodule Phoenix.Router do
   end
 
   defp match_dispatch() do
+    ##  保持宏的行号不要变
     quote location: :keep do
       @behaviour Plug
 
@@ -273,8 +279,10 @@ defmodule Phoenix.Router do
   @doc false
   defmacro __before_compile__(env) do
     routes = env.module |> Module.get_attribute(:phoenix_routes) |> Enum.reverse
+    # 将Router变成
+    # [{Router1,Router.exprs(Route1)},{Router2,Router.exprs(Router2)}]
     routes_with_exprs = Enum.map(routes, &{&1, Route.exprs(&1)})
-
+    # 使用helpers生成路由
     Helpers.define(env, routes_with_exprs)
     matches = Enum.map(routes_with_exprs, &build_match/1)
 

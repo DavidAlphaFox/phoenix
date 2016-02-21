@@ -362,7 +362,7 @@ defmodule Phoenix.Endpoint do
   alias Phoenix.Endpoint.Adapter
 
   @doc false
-  ### 使用宏
+  ### 使用宏,当用use的时候，会触发该宏
   defmacro __using__(opts) do
     quote do
       unquote(config(opts))
@@ -374,6 +374,7 @@ defmodule Phoenix.Endpoint do
 
   defp config(opts) do
     quote do
+      ## 展开app名称
       @otp_app unquote(opts)[:otp_app] || raise "endpoint expects :otp_app to be given"
       var!(config) = Adapter.config(@otp_app, __MODULE__)
       var!(code_reloading?) = var!(config)[:code_reloader]
