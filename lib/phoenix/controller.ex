@@ -715,7 +715,7 @@ defmodule Phoenix.Controller do
     update_in conn.assigns,
               & &1 |> Map.merge(assigns) |> Map.put(:layout, layout)
   end
-
+  ## 默认的layout只支持html
   defp layout(conn, assigns, format) do
     if format in layout_formats(conn) do
       case Map.fetch(assigns, :layout) do

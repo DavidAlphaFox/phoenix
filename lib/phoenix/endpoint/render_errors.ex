@@ -74,7 +74,8 @@ defmodule Phoenix.Endpoint.RenderErrors do
         format = get_format(conn)
         status = status(kind, reason)
         format = "#{status}.#{format}"
-
+        # 出错了默认不使用layout
+        # 这也就保证了404或500页面的随意性
         conn
         |> put_layout(false)
         |> put_view(opts[:view])
