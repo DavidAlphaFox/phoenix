@@ -355,19 +355,23 @@ defmodule Phoenix.Router do
   defmacro match(verb, path, plug, plug_opts, options \\ []) do
     add_route(:match, verb, path, plug, plug_opts, options)
   end
-
+  ## 使用直接执行代的方式
+  ## 生成所有的http请求的宏操作
   for verb <- @http_methods do
     @doc """
     Generates a route to handle a #{verb} request to the given path.
     """
     defmacro unquote(verb)(path, plug, plug_opts, options \\ []) do
       verb = unquote(verb)
+      ## 直接自动展开
       quote bind_quoted: binding do
+        ## 默认使用match规则来添加
         match(verb, path, plug, plug_opts, options)
       end
     end
   end
-
+  ## 添加路由信息
+  ## 这是修改phoenix_routes的最后的地方
   defp add_route(kind, verb, path, plug, plug_opts, options) do
     quote do
       @phoenix_routes Scope.route(__MODULE__, unquote(kind), unquote(verb), unquote(path),

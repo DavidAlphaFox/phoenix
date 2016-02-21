@@ -140,7 +140,8 @@ defmodule Phoenix.Router.Scope do
   defp get_stack(module) do
     get_attribute(module, @stack)
   end
-
+  ## 更新和模块相关的栈
+  ## 使用模块的属性来实现的
   defp update_stack(module, fun) do
     update_attribute(module, @stack, fun)
   end
