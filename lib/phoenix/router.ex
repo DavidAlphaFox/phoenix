@@ -276,6 +276,7 @@ defmodule Phoenix.Router do
   end
   # 这个和@before_compile相对应
   # 在编译期间将用户定义好的路由表直接生成出来
+  ## __before_compile__是晚于__using__宏之行的
   @doc false
   defmacro __before_compile__(env) do
     routes = env.module |> Module.get_attribute(:phoenix_routes) |> Enum.reverse
