@@ -58,7 +58,7 @@ defmodule Phoenix.Controller do
 
   As with routers, controllers also have their own plug pipeline.
   However, different from routers, controllers have a single pipeline:
-
+      # 此处注意，这个相当于Rails的filter_before
       defmodule MyApp.UserController do
         use MyApp.Web, :controller
 
@@ -125,6 +125,7 @@ defmodule Phoenix.Controller do
       use Phoenix.Controller.Pipeline
 
       plug Phoenix.Controller.Logger, opts
+      # 此处默认指定渲染的layout的和view模块
       plug :put_new_layout, {Phoenix.Controller.__layout__(__MODULE__, opts), :app}
       plug :put_new_view, Phoenix.Controller.__view__(__MODULE__)
     end
@@ -1028,6 +1029,8 @@ defmodule Phoenix.Controller do
 
   @doc false
   def __view__(controller_module) do
+    # 去掉Controller结尾
+    # 算事约定吧，然后添加上View作为结尾
     controller_module
     |> Phoenix.Naming.unsuffix("Controller")
     |> Kernel.<>("View")

@@ -118,11 +118,13 @@ defmodule Phoenix.View do
   the template to also be looked up at `Path.join(root, "user")`.
   """
   defmacro __using__(options) do
+    # 的到模版的根目录
     if root = Keyword.get(options, :root) do
       namespace =
         if given = Keyword.get(options, :namespace) do
           given
         else
+          ## 得到调用者模块的名字空间
           __CALLER__.module
           |> Module.split()
           |> Enum.take(1)
