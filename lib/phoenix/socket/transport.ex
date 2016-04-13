@@ -187,18 +187,19 @@ defmodule Phoenix.Socket.Transport do
 
   """
   def dispatch(msg, channels, socket)
-
+  ## 心跳信息
   def dispatch(%{ref: ref, topic: "phoenix", event: "heartbeat"}, _channels, _socket) do
     {:reply, %Reply{ref: ref, topic: "phoenix", status: :ok, payload: %{}}}
   end
-
+  ## 派发非心跳的消息
   def dispatch(%Message{} = msg, channels, socket) do
     channels
     |> HashDict.get(msg.topic)
     |> do_dispatch(msg, socket)
   end
-
+  ## 连接端Channel请求加入
   defp do_dispatch(nil, %{event: "phx_join", topic: topic} = msg, socket) do
+    ## 使用__channel__函数进行匹配
     if channel = socket.handler.__channel__(topic, socket.transport_name) do
       socket = %Socket{socket | topic: topic, channel: channel}
 

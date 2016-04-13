@@ -21,6 +21,7 @@ defmodule Phoenix.Channel.Server do
 
     case GenServer.start_link(__MODULE__, {socket, auth_payload, self(), ref}) do
       {:ok, pid} ->
+        # 会在此等待相应的进程返回消息
         receive do: ({^ref, reply} -> {:ok, reply, pid})
       :ignore ->
         receive do: ({^ref, reply} -> {:error, reply})
@@ -164,7 +165,7 @@ defmodule Phoenix.Channel.Server do
   @doc false
   def init({socket, auth_payload, parent, ref}) do
     socket = %{socket | channel_pid: self()}
-
+    ## 调用用户写的Channel模块的join函数
     case socket.channel.join(socket.topic, auth_payload, socket) do
       {:ok, socket} ->
         join(socket, %{}, parent, ref)
@@ -190,7 +191,8 @@ defmodule Phoenix.Channel.Server do
   def code_change(old, socket, extra) do
     socket.channel.code_change(old, socket, extra)
   end
-
+  # 准许join后，会将自己添加到PubSub队列上
+  # 订阅相应的topic
   defp join(socket, reply, parent, ref) do
     PubSub.subscribe(socket.pubsub_server, self(), socket.topic,
       link: true,

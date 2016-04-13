@@ -139,6 +139,7 @@ class Push {
   send(){ if(this.hasReceived("timeout")){ return }
     this.startTimeout()
     this.sent = true
+    // 通过Channel所对应的通信方式，发送一个事件
     this.channel.socket.push({
       topic: this.channel.topic,
       event: this.event,
@@ -263,7 +264,7 @@ export class Channel {
   onError(callback){
     this.on(CHANNEL_EVENTS.error, reason => callback(reason) )
   }
-
+  // 添加相应的绑定
   on(event, callback){ this.bindings.push({event, callback}) }
 
   off(event){ this.bindings = this.bindings.filter( bind => bind.event !== event ) }
@@ -319,7 +320,7 @@ export class Channel {
   // private
 
   isMember(topic){ return this.topic === topic }
-
+  // 发送Join请求
   sendJoin(timeout){
     this.state = CHANNEL_STATES.joining
     this.joinPush.resend(timeout)
@@ -405,7 +406,7 @@ export class Socket {
     }
     callback && callback()
   }
-
+  // 连接服务器
   // params - The params to send when connecting, for example `{user_id: userToken}`
   connect(params){
     if(params){
@@ -413,7 +414,8 @@ export class Socket {
       this.params = params
     }
     if(this.conn){ return }
-
+    // 使用特定的连接技术
+    // 创建客户端和服务器的传输  
     this.conn = new this.transport(this.endPointURL())
     this.conn.timeout   = this.longpollerTimeout
     this.conn.onopen    = () => this.onConnOpen()
@@ -438,8 +440,11 @@ export class Socket {
 
   onConnOpen(){
     this.log("transport", `connected to ${this.endPointURL()}`, this.transport.prototype)
+    // 清空发送buffer
     this.flushSendBuffer()
+    // 重置重连计时器
     this.reconnectTimer.reset()
+    // 如果需要心跳，开启心跳
     if(!this.conn.skipHeartbeat){
       clearInterval(this.heartbeatTimer)
       this.heartbeatTimer = setInterval(() => this.sendHeartbeat(), this.heartbeatIntervalMs)
@@ -479,7 +484,7 @@ export class Socket {
   remove(channel){
     this.channels = this.channels.filter( c => !c.isMember(channel.topic) )
   }
-
+  // 创建新的channel对象
   channel(topic, chanParams = {}){
     let chan = new Channel(topic, chanParams, this)
     this.channels.push(chan)
@@ -488,6 +493,7 @@ export class Socket {
 
   push(data){
     let {topic, event, payload, ref} = data
+    // 使用底层连接发送Json数据
     let callback = () => this.conn.send(JSON.stringify(data))
     this.log("push", `${topic} ${event} (${ref})`, payload)
     if(this.isConnected()){

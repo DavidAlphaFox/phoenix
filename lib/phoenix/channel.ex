@@ -223,7 +223,7 @@ defmodule Phoenix.Channel do
       def handle_info(_message, socket), do: {:noreply, socket}
 
       def terminate(_reason, _socket), do: :ok
-
+      # 定义可重写
       defoverridable code_change: 3, handle_info: 2, handle_in: 3, terminate: 2
     end
   end
@@ -294,6 +294,7 @@ defmodule Phoenix.Channel do
 
   """
   def broadcast(socket, event, message) do
+    # 确保已经加入
     %{pubsub_server: pubsub_server, topic: topic} = assert_joined!(socket)
     Server.broadcast pubsub_server, topic, event, message
   end

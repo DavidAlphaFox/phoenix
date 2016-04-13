@@ -156,6 +156,7 @@ defmodule Phoenix.Socket do
     quote do
       @behaviour Phoenix.Socket
       import unquote(__MODULE__)
+      # 注册模块属性
       Module.register_attribute(__MODULE__, :phoenix_channels, accumulate: true)
       @phoenix_transports %{}
       @before_compile unquote(__MODULE__)
@@ -165,7 +166,7 @@ defmodule Phoenix.Socket do
   defmacro __before_compile__(env) do
     transports = Module.get_attribute(env.module, :phoenix_transports)
     channels   = Module.get_attribute(env.module, :phoenix_channels)
-
+    # 定义通信方式
     transport_defs =
       for {name, {mod, conf}} <- transports do
         quote do
@@ -174,7 +175,7 @@ defmodule Phoenix.Socket do
           end
         end
       end
-
+    # 定义Channel
     channel_defs =
       for {topic_pattern, module, opts} <- channels do
         topic_pattern
