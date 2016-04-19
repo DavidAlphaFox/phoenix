@@ -595,7 +595,7 @@ defmodule Phoenix.Controller do
             "Please set `plug :accepts, %w(html json ...)` in your pipeline."
     do_render(conn, template_name(template, format), format, assigns)
   end
-
+  ## 默认template是binary
   def render(conn, template, assigns) when is_binary(template) do
     case Path.extname(template) do
       "." <> format ->
