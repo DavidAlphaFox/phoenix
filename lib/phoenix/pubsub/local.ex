@@ -65,7 +65,7 @@ defmodule Phoenix.PubSub.Local do
       pid
       |> pid_to_shard(pool_size)
       |> pools_for_shard(pubsub_server)
-
+    # 取消订阅的时候，直接让GC进程来处理  
     :ok = Phoenix.PubSub.GC.unsubscribe(pid, topic, local_server, gc_server)
   end
 
@@ -212,12 +212,16 @@ defmodule Phoenix.PubSub.Local do
   end
 
   def handle_call({:subscribe, pid, _topic, opts}, _from, state) do
+    # 如果参数中有:link,则进行link
     if opts[:link], do: Process.link(pid)
+    # 进行监控
     Process.monitor(pid)
     {:reply, {:ok, {state.topics, state.pids}}, state}
   end
 
   def handle_info({:DOWN, _ref, _type, pid, _info}, state) do
+    # 监控的进程down了
+    # 直接让GC进程来处理
     Phoenix.PubSub.GC.down(state.gc_server, pid)
     {:noreply, state}
   end

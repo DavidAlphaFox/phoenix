@@ -27,11 +27,13 @@ defmodule Phoenix.PubSub.PG2 do
 
   @doc false
   def init([server, opts]) do
+    ## 在参数中获得pool_size
     pool_size = Keyword.fetch!(opts, :pool_size)
     ### 广播使用PG2Server
     dispatch_rules = [{:broadcast, Phoenix.PubSub.PG2Server, [server, pool_size]}]
 
     children = [
+      ## 启动LocalSupervisor创建一组Local进程
       supervisor(Phoenix.PubSub.LocalSupervisor, [server, pool_size, dispatch_rules]),
       worker(Phoenix.PubSub.PG2Server, [server]),
     ]

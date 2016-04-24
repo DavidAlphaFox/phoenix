@@ -21,6 +21,7 @@ defmodule Phoenix.PubSub.LocalSupervisor do
   def init([server, pool_size, dispatch_rules]) do
     # Define a dispatch table so we don't have to go through
     # a bottleneck to get the instruction to perform.
+    # 创建以server命名的ets
     ^server = :ets.new(server, [:set, :named_table, read_concurrency: true])
     true = :ets.insert(server, {:subscribe, Phoenix.PubSub.Local, [server, pool_size]})
     true = :ets.insert(server, {:unsubscribe, Phoenix.PubSub.Local, [server, pool_size]})
@@ -35,7 +36,8 @@ defmodule Phoenix.PubSub.LocalSupervisor do
         worker(Phoenix.PubSub.GC, [gc_shard_name, local_shard_name]),
         worker(Phoenix.PubSub.Local, [local_shard_name, gc_shard_name]),
       ]
-
+      # 创建监控者，监控者的id是当前shard号
+      # worker, 分别GC和Local进程
       supervisor(Supervisor, [shard_children, [strategy: :one_for_all]], id: shard)
     end
 

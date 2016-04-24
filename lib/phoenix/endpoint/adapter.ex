@@ -37,12 +37,14 @@ defmodule Phoenix.Endpoint.Adapter do
     args = [app, mod, conf, [name: Module.concat(mod, Config)]]
     [worker(Phoenix.Config, args)]
   end
-
+  # 此处启动pubsub的服务器
   defp pubsub_children(mod, conf) do
     pub_conf = conf[:pubsub]
 
     if adapter = pub_conf[:adapter] do
       ### supervisor(module, args, options \\ [])
+      # 默认是Phoenix.PubSub.PG2
+      # 参数是名字和配置
       [supervisor(adapter, [mod.__pubsub_server__(), pub_conf])]
     else
       []
