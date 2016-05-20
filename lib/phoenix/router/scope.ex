@@ -26,6 +26,7 @@ defmodule Phoenix.Router.Scope do
 
     {path, host, alias, as, pipes, private, assigns} =
       join(module, path, plug, as, private, assigns)
+      ## 生成route数据结构
     Phoenix.Router.Route.build(kind, verb, path, host, alias, plug_opts, as, pipes, private, assigns)
   end
 

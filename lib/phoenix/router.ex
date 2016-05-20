@@ -352,6 +352,7 @@ defmodule Phoenix.Router do
       match(:move, "/events/:id", EventController, :move)
 
   """
+  # match可以match任意的一个动作或者路径
   defmacro match(verb, path, plug, plug_opts, options \\ []) do
     add_route(:match, verb, path, plug, plug_opts, options)
   end
@@ -374,6 +375,7 @@ defmodule Phoenix.Router do
   ## 这是修改phoenix_routes的最后的地方
   defp add_route(kind, verb, path, plug, plug_opts, options) do
     quote do
+      ## 将生成的Route结构放入全局的phoenix_routes中
       @phoenix_routes Scope.route(__MODULE__, unquote(kind), unquote(verb), unquote(path),
                                   unquote(plug), unquote(plug_opts), unquote(options))
     end
@@ -662,6 +664,7 @@ defmodule Phoenix.Router do
       end
 
   """
+  ## 将特定的路径直接交给一个Plug进行处理
   defmacro forward(path, plug, plug_opts \\ [], router_opts \\ []) do
     router_opts = Keyword.put(router_opts, :as, nil)
 
